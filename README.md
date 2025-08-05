@@ -167,3 +167,88 @@ We now have a paper you can cite:
 ## ⚖️ License
 
 Apache 2.0 — see the [LICENSE](LICENSE) file for details.
+
+
+Mem0 là gì?
+Mem0 là một "lớp bộ nhớ" (memory layer) dành cho AI, giúp cho các trợ lý AI và các agent AI trở nên cá nhân hóa hơn. Nghĩa là, AI có thể ghi nhớ sở thích, lịch sử tương tác và thói quen của người dùng, nhờ vậy phản hồi trở nên tự nhiên, thông minh và sát với nhu cầu thực tế hơn.
+
+Ví dụ: Chatbot có thể nhớ bạn đã hỏi gì trước đó, hay bạn thích phong cách trả lời như thế nào; AI quản lý lịch sử chăm sóc khách hàng, game hoặc công cụ làm việc nhớ được những lần sử dụng trước của bạn để đưa ra trải nghiệm phù hợp.
+
+Dự án này giải quyết vấn đề gì?
+Thông thường, AI không nhớ lâu về các tương tác trước đó (vì giới hạn ngữ cảnh hoặc chi phí lưu trữ dữ liệu). Mem0 tạo ra một lớp ghi nhớ hiệu quả, nhanh hơn, tiết kiệm chi phí hơn, và chính xác hơn so với các giải pháp bộ nhớ truyền thống của AI như OpenAI Memory.
+
+Một số điểm mạnh nổi bật:
+
+Tăng 26% độ chính xác khi ghi nhớ so với OpenAI Memory trên benchmark LOCOMO
+
+Phản hồi nhanh hơn 91%
+
+Giảm 90% chi phí token (bộ nhớ ngữ cảnh) so với giải pháp lưu trữ toàn bộ ngữ cảnh
+
+Tính năng chính
+Ghi nhớ đa cấp độ: Lưu trữ trạng thái người dùng, phiên làm việc, và agent riêng biệt
+
+Dễ tích hợp: Có API rõ ràng, hỗ trợ nhiều nền tảng, và cả dịch vụ quản lý sẵn sàng sử dụng (hosted)
+
+Tương thích nhiều LLM: Hoạt động tốt với nhiều mô hình ngôn ngữ lớn (LLM) như GPT-4, Claude, v.v.
+
+Ứng dụng thực tế
+Trợ lý AI (AI Assistant): Nhớ nội dung các cuộc trò chuyện cũ để trả lời liền mạch hơn
+
+Chăm sóc khách hàng: Ghi nhớ các ticket cũ và lịch sử khách hàng
+
+Y tế: Theo dõi thông tin bệnh nhân, sở thích điều trị
+
+Năng suất & Game: Ghi nhớ hành vi người dùng, cá nhân hóa trải nghiệm làm việc hoặc chơi game
+
+Cách sử dụng nhanh (Quickstart)
+Bạn có thể chọn:
+
+Dùng nền tảng quản lý sẵn (Hosted Platform): Đăng ký tài khoản tại mem0.ai, lấy API key và tích hợp vào app của bạn
+
+Tự host mã nguồn (Self-hosted):
+
+Python: pip install mem0ai
+
+NodeJS: npm install mem0ai
+
+Ví dụ sử dụng cơ bản bằng Python
+python
+Sao chép
+Chỉnh sửa
+from openai import OpenAI
+from mem0 import Memory
+
+openai_client = OpenAI()
+memory = Memory()
+
+def chat_with_memories(message: str, user_id: str = "default_user") -> str:
+    # Lấy ra những "ký ức" liên quan từ bộ nhớ
+    relevant_memories = memory.search(query=message, user_id=user_id, limit=3)
+    memories_str = "\n".join(f"- {entry['memory']}" for entry in relevant_memories["results"])
+
+    # Gửi prompt cho AI, đính kèm "ký ức"
+    system_prompt = f"Bạn là AI thân thiện. Trả lời dựa trên câu hỏi và ký ức của người dùng:\n{memories_str}"
+    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": message}]
+    response = openai_client.chat.completions.create(model="gpt-4o-mini", messages=messages)
+    assistant_response = response.choices[0].message.content
+
+    # Lưu hội thoại mới vào bộ nhớ
+    messages.append({"role": "assistant", "content": assistant_response})
+    memory.add(messages, user_id=user_id)
+
+    return assistant_response
+Xem thêm: Hướng dẫn nhanh và API Reference.
+
+Demo, tài liệu & hỗ trợ
+Demo thử: mem0.dev/demo
+
+Tài liệu chi tiết: docs.mem0.ai
+
+Discord cộng đồng: mem0.dev/DiG
+
+Email hỗ trợ: founders@mem0.ai
+
+Kết luận ngắn gọn
+Nếu bạn làm việc với AI, chatbot, hoặc muốn app của mình biết nhớ và cá nhân hóa, Mem0 là nền tảng dễ tích hợp và tối ưu chi phí mà bạn nên thử.
+Bạn có thể thử nghiệm ngay với bản open source hoặc dùng dịch vụ hosted.
